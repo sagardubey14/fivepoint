@@ -1,11 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useUser } from "../context/UserContext";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [user, setUser] = useState({
-    name: "sagar",
-    role: "admin",
-  });
+  const {user, setUser} = useUser();
+  const navigate = useNavigate();
+
+  // useEffect(()=>{
+  //   if(!user) return;
+  //   if(user.role==='admin'){
+  //     navigate('/admin')
+  //   }
+  // },[user, navigate])
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -13,41 +20,59 @@ const Navbar = () => {
 
   const navLinks = (
     <>
-      <div className="text-white font-medium hover:text-gray-200 cursor-pointer">
+      <Link
+        to="/about"
+        className="text-white font-medium hover:text-gray-200 cursor-pointer"
+      >
         About
-      </div>
+      </Link>
+
       {!user ? (
         <>
-          <div
+          <Link
+            to={''}
             className="text-white font-medium hover:text-gray-200 cursor-pointer"
-            onClick={() =>
+            onClick={() => {
               setUser({
                 name: "sagar",
                 role: "admin",
-              })
-            }
+              });
+              navigate('/admin')
+            }}
           >
             Login
-          </div>
-          <div className="text-white font-medium hover:text-gray-200 cursor-pointer">
+          </Link>
+
+          <Link
+            to="/auth"
+            className="text-white font-medium hover:text-gray-200 cursor-pointer"
+          >
             Signup
-          </div>
+          </Link>
         </>
       ) : (
         <>
-          <div className="text-white font-medium hover:text-gray-200 cursor-pointer">
+          <Link
+            to="/profile"
+            className="text-white font-medium hover:text-gray-200 cursor-pointer"
+          >
             Profile
-          </div>
+          </Link>
+
           <div
             className="text-white font-medium hover:text-gray-200 cursor-pointer"
             onClick={() => setUser(null)}
           >
             Logout
           </div>
+
           {["admin", "store"].includes(user.role) && (
-            <div className="text-white font-medium hover:text-gray-200 cursor-pointer">
+            <Link
+              to={`/${user.role}`}
+              className="text-white font-medium hover:text-gray-200 cursor-pointer"
+            >
               Dashboard
-            </div>
+            </Link>
           )}
         </>
       )}
@@ -57,10 +82,8 @@ const Navbar = () => {
   return (
     <nav className="bg-gray-800 p-4">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
-        <div className="text-white text-lg font-semibold">Five-Point</div>
-        <div className="hidden md:flex space-x-6">
-          {navLinks}
-        </div>
+        <Link to={'/'} className="text-white text-lg font-semibold">Five-Point</Link>
+        <div className="hidden md:flex space-x-6">{navLinks}</div>
         <div className="md:hidden flex items-center">
           <button
             onClick={toggleMenu}
@@ -74,9 +97,9 @@ const Navbar = () => {
               className="h-6 w-6"
             >
               <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
                 d="M4 6h16M4 12h16M4 18h16"
               ></path>
             </svg>
@@ -84,9 +107,7 @@ const Navbar = () => {
         </div>
       </div>
       {isOpen && (
-        <div className="md:hidden bg-gray-800 p-4 space-y-4">
-          {navLinks}
-        </div>
+        <div className="md:hidden bg-gray-800 p-4 space-y-4">{navLinks}</div>
       )}
     </nav>
   );
