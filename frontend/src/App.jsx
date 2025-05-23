@@ -1,9 +1,9 @@
-import React from 'react'
+import LandingPage from "./Components/LandinPage"
 
 function App() {
   return (
     <div>
-      FivePoint
+      <LandingPage />
     </div>
   )
 }
