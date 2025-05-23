@@ -5,15 +5,15 @@ import { useUser } from "../context/UserContext";
 
 const AuthToggle = () => {
   const location = useLocation();
-    const {user, setUser} = useUser();
-    const navigate = useNavigate();
+  const { user, setUser } = useUser();
+  const navigate = useNavigate();
 
-    useEffect(()=>{
-      if(!user) return;
-      if(user.role_id===1){
-        navigate('/admin')
-      }
-    },[user, navigate]);
+  useEffect(() => {
+    if (!user) return;
+    if (user.role_id === 1) {
+      navigate("/admin");
+    }
+  }, [user, navigate]);
 
   const initialFormType = location.state?.formType || "login";
   const [formType, setFormType] = useState(initialFormType);
@@ -28,6 +28,7 @@ const AuthToggle = () => {
     fullName: "",
     email: "",
     password: "",
+    address: "",
   });
 
   useEffect(() => {
@@ -53,19 +54,51 @@ const AuthToggle = () => {
       if (formType === "login") {
         const res = await axios.post("http://localhost:3000/users/login", loginData);
         localStorage.setItem("token", res.data.token);
-        setUser(res.data.user)
+        setUser(res.data.user);
         setLoginData({ email: "", password: "" });
         setError("");
       } else {
+        const { fullName, email, password, address } = signupData;
+
+        // Validations
+        if (fullName.length < 20 || fullName.length > 60) {
+          setError("Full Name must be between 20 and 60 characters.");
+          return;
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+          setError("Invalid email format.");
+          return;
+        }
+
+        if (password.length < 8 || password.length > 16) {
+          setError("Password must be 8–16 characters long.");
+          return;
+        }
+
+        const uppercaseRegex = /[A-Z]/;
+        const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
+        if (!uppercaseRegex.test(password) || !specialCharRegex.test(password)) {
+          setError("Password must include at least one uppercase letter and one special character.");
+          return;
+        }
+
+        if (address.length > 400) {
+          setError("Address cannot exceed 400 characters.");
+          return;
+        }
+
         const signupPayload = {
-          name: signupData.fullName,
-          email: signupData.email,
-          password: signupData.password,
+          name: fullName,
+          email: email,
+          password: password,
+          address: address || null,
           role_id: 2,
         };
 
         const res = await axios.post("http://localhost:3000/users/signup", signupPayload);
-        setSignupData({ fullName: "", email: "", password: "" });
+        setSignupData({ fullName: "", email: "", password: "", address: "" });
         setError("");
       }
     } catch (error) {
@@ -108,15 +141,25 @@ const AuthToggle = () => {
 
         <form className="space-y-4" onSubmit={handleSubmit}>
           {formType === "signup" && (
-            <input
-              type="text"
-              name="fullName"
-              value={signupData.fullName}
-              onChange={handleChange}
-              placeholder="Full Name"
-              className="w-full px-4 py-3 border border-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
+            <>
+              <input
+                type="text"
+                name="fullName"
+                value={signupData.fullName}
+                onChange={handleChange}
+                placeholder="Full Name"
+                className="w-full px-4 py-3 border border-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              />
+              <input
+                type="text"
+                name="address"
+                value={signupData.address}
+                onChange={handleChange}
+                placeholder="Address (Optional)"
+                className="w-full px-4 py-3 border border-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </>
           )}
 
           <input

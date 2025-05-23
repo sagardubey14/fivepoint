@@ -4,9 +4,10 @@ const UserContext = createContext();
 
 export function UserProvider({children}) {
     const [user, setUser] = useState(null);
+    const [allUsers, setAllUsers] = useState([]);
     
   return (
-    <UserContext.Provider value={{user, setUser}}>
+    <UserContext.Provider value={{user, setUser, allUsers, setAllUsers}}>
       {children}
     </UserContext.Provider>
   )

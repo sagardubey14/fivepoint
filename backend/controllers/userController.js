@@ -4,14 +4,16 @@ const jwt = require('jsonwebtoken');
 
 exports.signup = async (req, res) => {
   try {
-    const { name, email, password, role_id } = req.body;
+    const { name, email, password, address, role_id } = req.body;
+    console.log(address);
+    
     const [existing] = await db.query('SELECT id FROM users WHERE email = ?', [email]);
     if (existing.length > 0) return res.status(409).json({ error: 'Email already in use' });
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const [result] = await db.query(
-      'INSERT INTO users (name, email, password, role_id) VALUES (?, ?, ?, ?)',
-      [name, email, hashedPassword, role_id]
+      'INSERT INTO users (name, email, password, address, role_id) VALUES (?, ?, ?, ?, ?)',
+      [name, email, hashedPassword, address, role_id]
     );
     res.status(201).json({ message: 'User created', userId: result.insertId });
   } catch (err) {
@@ -32,7 +34,7 @@ exports.login = async (req, res) => {
     const payload = { id: user.id, email: user.email, role_id: user.role_id };
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
 
-    res.json({ message: 'Login successful', token, user: { id: user.id, name: user.name, email: user.email, role_id: user.role_id } });
+    res.json({ message: 'Login successful', token, user: { id: user.id, name: user.name, email: user.email, role_id: user.role_id, address: user.address } });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -41,7 +43,7 @@ exports.login = async (req, res) => {
 exports.getAllUsers = async (req, res) => {
   try {
     const [rows] = await db.query(`
-      SELECT users.id, users.name, users.email, roles.name AS role 
+      SELECT users.id, users.name, users.email, users.address, roles.name AS role 
       FROM users JOIN roles ON users.role_id = roles.id
     `);
     res.json(rows);

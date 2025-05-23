@@ -1,25 +1,55 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link, Outlet } from "react-router-dom";
+import { useUser } from "../context/UserContext";
+import axios from "axios";
 
 const Dashboard = () => {
+  const [metric, setMetric] = useState(null);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get("http://localhost:3000/getStats", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        console.log(res.data);
+        setMetric(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const { user, setUser } = useUser();
   const adminProfile = {
-    name: "Sagar Admin",
-    email: "sagar.admin@example.com",
+    name: user.name,
+    email: user.email,
     role: "Administrator",
+    address: user.address,
     avatar: "https://i.pravatar.cc/100?img=12",
   };
 
   const stats = [
     { id: 1, title: "Users", value: 1240, icon: "👥", bgColor: "bg-blue-600" },
     { id: 2, title: "Stores", value: 320, icon: "🏬", bgColor: "bg-green-600" },
-    { id: 3, title: "Ratings", value: 5421, icon: "⭐", bgColor: "bg-yellow-500" },
+    {
+      id: 3,
+      title: "Ratings",
+      value: 5421,
+      icon: "⭐",
+      bgColor: "bg-yellow-500",
+    },
   ];
 
   return (
     <div className="flex min-h-screen bg-gray-100 text-gray-900">
       {/* Sidebar */}
       <aside className="w-64 bg-white shadow-lg flex flex-col p-6">
-        <h1 className="text-3xl font-extrabold mb-10 text-indigo-700">FivePoint</h1>
+        <h1 className="text-3xl font-extrabold mb-10 text-indigo-700">
+          FivePoint
+        </h1>
         <nav className="flex flex-col space-y-4">
           <Link
             to="/admin/"
@@ -88,6 +118,10 @@ const Dashboard = () => {
             </p>
             <p>
               <span className="font-semibold">Role:</span> {adminProfile.role}
+            </p>
+            <p>
+              <span className="font-semibold">Address:</span>{" "}
+              {adminProfile.address}
             </p>
           </div>
         </section>

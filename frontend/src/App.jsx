@@ -11,14 +11,13 @@ import AuthToggle from "./Components/AuthToggle";
 function App() {
   return (
     <UserProvider>
-      <Navbar />
+      {/* <Navbar /> */}
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/about" element={<div>About</div>} />
         <Route path="/auth" element={<AuthToggle />} />
 
         <Route path="/admin" element={<Dashboard />}>
-          <Route index element={<Users />} /> {/* Matches /admin */}
           <Route path="users" element={<Users />} />
           <Route path="users/:id" element={<UserDetail />} />
           <Route path="stores" element={<Stores />} />
