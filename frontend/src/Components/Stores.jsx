@@ -51,7 +51,7 @@ const Stores = () => {
       <h3 className="text-xl font-semibold mb-4">Store Management</h3>
       <button
         onClick={() => setIsFormVisible(true)}
-        className="absolute top-6 right-6 w-12 h-12 rounded-full bg-green-600 text-white text-3xl font-bold hover:bg-green-700 flex items-center justify-center"
+        className="absolute top-4 right-6 w-12 h-12 rounded-full bg-green-600 text-white text-3xl font-bold hover:bg-green-700 flex items-center justify-center"
         aria-label="Add Store"
         title="Add Store"
       >

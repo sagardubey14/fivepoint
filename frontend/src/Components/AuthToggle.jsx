@@ -26,8 +26,8 @@ const AuthToggle = () => {
   const [error, setError] = useState("");
 
   const [loginData, setLoginData] = useState({
-    email: "123@gmail.com",
-    password: "Abc@123456",
+    email: "321@gmail.com",
+    password: "Default@123",
   });
 
   const [signupData, setSignupData] = useState({

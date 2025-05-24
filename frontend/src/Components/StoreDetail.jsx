@@ -1,51 +1,18 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 
-const imageUrls = [
-  "https://picsum.photos/id/1011/400/300",
-  "https://picsum.photos/id/1015/400/300",
-  "https://picsum.photos/id/1021/400/300",
-  "https://picsum.photos/id/1035/400/300",
-  "https://picsum.photos/id/1041/400/300",
-];
-
 const StoreDetail = () => {
-  const { user } = useUser();
+  const { user, stores } = useUser();
   const { id } = useParams();
   const navigate = useNavigate();
   const storeId = parseInt(id, 10);
 
-  const [stores, setStores] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [rating, setRating] = useState(0);
-
-  useEffect(() => {
-    const fetchStores = async () => {
-      try {
-        const response = await axios.get("http://localhost:3000/users/getstores");
-        const dataWithImages = response.data.map((store, index) => ({
-          ...store,
-          img: imageUrls[index % imageUrls.length],
-        }));
-        setStores(dataWithImages);
-
-        const selected = dataWithImages.find((s) => s.id === storeId);
-        if (selected) setRating(selected.average_rating || 0);
-      } catch (error) {
-        console.error("Failed to fetch stores:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchStores();
-  }, [storeId]);
-
   const store = stores.find((s) => s.id === storeId);
-
-  if (loading) return <div className="p-6 text-center">Loading...</div>;
+  const [rating, setRating] = useState(
+    store?.average_rating ? parseFloat(store.average_rating) : 0
+  );
 
   if (!store) {
     return (
@@ -67,7 +34,7 @@ const StoreDetail = () => {
       const token = localStorage.getItem("token");
 
       await axios.post(
-        "http://localhost:3000/user/rate",
+        "http://localhost:3000/users/rate",
         {
           store_id: store.id,
           user_id: user.id,
@@ -96,16 +63,21 @@ const StoreDetail = () => {
       >
         ← Back to Stores
       </button>
-
       <img
         src={store.img}
         alt={store.name}
         className="w-full h-48 object-cover rounded mb-4"
       />
-
       <h2 className="text-2xl font-bold mb-2">{store.name}</h2>
-      <p className="text-yellow-500 font-semibold mb-4">
-        {store.average_rating?.toFixed(1) || 0} ⭐ (Current Average)
+      <p className="text-gray-600 mb-2">
+        <span className="font-semibold">Address:</span> {store.address}
+      </p>
+      <p className="text-yellow-500 font-semibold mb-1">
+        {parseFloat(store.average_rating).toFixed(1)} ⭐ (Average Rating)
+      </p>
+      <p className="text-gray-700 mb-4">
+        <span className="font-semibold">Total Ratings:</span>{" "}
+        {store.total_ratings}
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-4">

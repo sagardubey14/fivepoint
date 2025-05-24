@@ -52,6 +52,32 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 
+exports.updatePass = async (req, res) => {
+  const { user_id, email, password } = req.body;
+  console.log(user_id, email, password);
+  
+  if (!user_id || !email || !password) {
+    return res.status(400).json({ error: "user_id, email, and password are required" });
+  }
+
+  try {
+    const [users] = await db.query('SELECT * FROM users WHERE id = ? AND email = ?', [user_id, email]);
+
+    if (users.length === 0) {
+      return res.status(404).json({ error: "User not found with provided ID and email" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await db.query('UPDATE users SET password = ? WHERE id = ?', [hashedPassword, user_id]);
+
+    res.status(200).json({ message: "Password updated successfully" });
+  } catch (err) {
+    console.error("Error updating password:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 exports.getUserById = async (req, res) => {
   try {
     const { id } = req.params;

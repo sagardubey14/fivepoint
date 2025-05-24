@@ -10,11 +10,13 @@ import AuthToggle from "./Components/AuthToggle";
 import StoreDetail from "./Components/StoreDetail";
 import OwnerDashboard from "./Components/OwnerDashboard";
 import UserDashboard from "./Components/UserDashboard";
+import Logout from "./Components/Logout";
 
 function App() {
   return (
     <UserProvider>
       {/* <Navbar /> */}
+      <Logout />
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/about" element={<div>About</div>} />

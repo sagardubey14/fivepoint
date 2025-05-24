@@ -35,9 +35,9 @@ exports.getStoresByOwner = async (req, res) => {
           [store.id]
         );
 
-        return {
+        return {  
           ...store,
-          average_rating: parseFloat(average_rating.toFixed(1)),
+          average_rating: parseFloat(Number(average_rating).toFixed(1)),
           ratedUsers,
         };
       })
@@ -47,5 +47,42 @@ exports.getStoresByOwner = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to fetch owner stores" });
+  }
+};
+
+
+exports.getStoreRating = async (req, res) => {
+  const userId = req.query.user_id;
+
+  if (!userId) {
+    return res.status(400).json({ error: "user_id is required in query parameters" });
+  }
+
+  try {
+    const [storeResult] = await db.query(
+      `SELECT id FROM stores WHERE owner_id = ? LIMIT 1`,
+      [userId]
+    );
+
+    if (storeResult.length === 0) {
+      return res.status(404).json({ error: "No store found for this user" });
+    }
+
+    const storeId = storeResult[0].id;
+
+    const [ratingResult] = await db.query(
+      `SELECT AVG(rating) AS average_rating FROM ratings WHERE store_id = ?`,
+      [storeId]
+    );
+
+    const average_rating = ratingResult[0]?.average_rating || 0;
+
+    res.json({
+      store_id: storeId,
+      average_rating: parseFloat(Number(average_rating).toFixed(1)),
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch store rating" });
   }
 };

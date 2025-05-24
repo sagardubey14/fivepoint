@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { User, Mail, Lock, Star } from "lucide-react";
 import { useUser } from "../context/UserContext";
 import axios from "axios";
+import updatePassword from "./updatePass";
 
 const OwnerDashboard = () => {
   const { user } = useUser();
-  console.log(user);
-  
+
   const [password, setPassword] = useState("");
   const [info, setInfo] = useState({
     name: user.name,
@@ -15,10 +15,21 @@ const OwnerDashboard = () => {
 
   const [stores, setStores] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleUpdate = (e) => {
+  const handleUpdate = async (e) => {
     e.preventDefault();
-    alert("Profile updated!");
+    setSuccessMessage("");
+    setErrorMessage("");
+
+    try {
+      await updatePassword({ ...info, password });
+      setSuccessMessage("Profile updated successfully!");
+      setPassword("");
+    } catch (err) {
+      setErrorMessage("Failed to update profile. Please try again.");
+    }
   };
 
   useEffect(() => {
@@ -38,7 +49,6 @@ const OwnerDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-100 to-white p-6 flex flex-col lg:flex-row gap-6">
-      {/* Sidebar Profile Panel */}
       <div className="w-full lg:w-1/3 bg-white/70 backdrop-blur-sm shadow-lg rounded-xl p-6 space-y-6">
         <h2 className="text-2xl font-bold text-gray-800">My Profile</h2>
         <form onSubmit={handleUpdate} className="space-y-4">
@@ -84,10 +94,15 @@ const OwnerDashboard = () => {
           >
             Update Info
           </button>
+          {successMessage && (
+            <p className="text-green-600 text-sm text-center">{successMessage}</p>
+          )}
+          {errorMessage && (
+            <p className="text-red-600 text-sm text-center">{errorMessage}</p>
+          )}
         </form>
       </div>
 
-      {/* Main Dashboard Content */}
       <div className="w-full lg:w-2/3 bg-white/70 backdrop-blur-sm shadow-xl rounded-xl p-6 space-y-8">
         <h2 className="text-2xl font-bold text-gray-800 mb-4">My Stores</h2>
 

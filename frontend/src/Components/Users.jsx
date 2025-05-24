@@ -71,7 +71,7 @@ const Users = () => {
 
       <button
         onClick={() => setIsFormVisible(true)}
-        className="absolute top-6 right-6 w-12 h-12 rounded-full bg-blue-600 text-white text-3xl font-bold hover:bg-blue-700 flex items-center justify-center"
+        className="absolute top-4 right-6 w-12 h-12 rounded-full bg-blue-600 text-white text-3xl font-bold hover:bg-blue-700 flex items-center justify-center"
         aria-label="Add User"
         title="Add User"
       >
@@ -166,9 +166,9 @@ const Users = () => {
           onChange={(e) => setFilter({ ...filter, role: e.target.value })}
         >
           <option value="">All Roles</option>
-          <option value="User">User</option>
-          <option value="Store Owner">Store Owner</option>
-          <option value="Admin">Admin</option>
+          <option value="user">User</option>
+          <option value="owner">Store Owner</option>
+          <option value="admin">Admin</option>
         </select>
       </div>
 
