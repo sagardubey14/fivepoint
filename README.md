@@ -96,12 +96,10 @@ All relationships use foreign keys with appropriate indexing and constraints.
 ---
 
 ## 📦 Sample Admin Credentials
-
-> ⚠️ Replace this section with secure credentials handling before production
-
+> This is Admin Credentials for testing
 ```env
 Email: test@example.com
-Password: <bcrypt hash>
+Password: Password@123
 ````
 
 ---
