@@ -3,9 +3,7 @@ import { useUser } from "../context/UserContext";
 import axios from "axios";
 
 const Stores = () => {
-  const { allUsers, user, setUser } = useUser();
-
-  const [stores, setStores] = useState();
+  const { allUsers, user, setUser, stores, setStores } = useUser();
 
   const [filter, setFilter] = useState({ name: "", address: "" });
   const [newStore, setNewStore] = useState({

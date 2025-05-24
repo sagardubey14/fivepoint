@@ -7,7 +7,7 @@ const Users = () => {
   const { allUsers, setAllUsers } = useUser();
 
   const [filter, setFilter] = useState({ name: "", email: "", role: "" });
-  const [newUser, setNewUser] = useState({ name: "", email: "", role: "User" });
+  const [newUser, setNewUser] = useState({ name: "", email: "", role: "user" });
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [formError, setFormError] = useState("");
   const filteredUsers = allUsers.filter(
@@ -43,9 +43,9 @@ const Users = () => {
     }
 
     const roleMap = {
-      User: 2,
-      "Store Owner": 3,
-      Admin: 1,
+      user: 2,
+      owner: 3,
+      admin: 1,
     };
 
     try {

@@ -70,3 +70,61 @@ exports.getTokenRefresh = async (req, res)=>{
     res.status(500).json({ error: err.message });
   }
 }
+
+exports.getStores = async (req, res) => {
+  try {
+    const [rows] = await db.query(`
+      SELECT 
+        s.id,
+        s.name,
+        s.address,
+        s.owner_id,
+        COALESCE(AVG(r.rating), 0) AS average_rating,
+        COUNT(r.id) AS total_ratings
+      FROM 
+        stores s
+      LEFT JOIN 
+        ratings r ON s.id = r.store_id
+      GROUP BY 
+        s.id, s.name, s.address, s.owner_id
+    `);
+
+    res.status(200).json(rows);
+  } catch (err) {
+    console.error("Error fetching stores:", err);
+    res.status(500).json({ error: err.message });
+  }
+};
+
+
+exports.rateStore = async (req, res) => {
+  const { store_id, user_id, rating, comment } = req.body;
+
+  if (!store_id || !user_id || !rating) {
+    return res.status(400).json({ error: "store_id, user_id, and rating are required" });
+  }
+
+  try {
+    const [existing] = await db.query(
+      "SELECT id FROM ratings WHERE store_id = ? AND user_id = ?",
+      [store_id, user_id]
+    );
+
+    if (existing.length > 0) {
+      await db.query(
+        "UPDATE ratings SET rating = ?, comment = ?, updated_at = NOW() WHERE store_id = ? AND user_id = ?",
+        [rating, comment || null, store_id, user_id]
+      );
+      return res.status(200).json({ message: "Rating updated successfully" });
+    } else {
+      await db.query(
+        "INSERT INTO ratings (store_id, user_id, rating, comment) VALUES (?, ?, ?, ?)",
+        [store_id, user_id, rating, comment || null]
+      );
+      return res.status(201).json({ message: "Rating submitted successfully" });
+    }
+  } catch (err) {
+    console.error("Error saving rating:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};

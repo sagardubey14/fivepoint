@@ -21,29 +21,48 @@ const Dashboard = () => {
     fetchData();
   }, []);
 
-  const { user, setUser, allUsers, setAllUsers } = useUser();
+  const { user, setUser, allUsers, setAllUsers, setStores } = useUser();
 
-  
-    useEffect(() => {
-      const fetchData = async () => {
-        const token = localStorage.getItem("token");
-  
-        try {
-          const res = await axios.get("http://localhost:3000/users", {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(
+          "http://localhost:3000/store/getallstores",
+          {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
-          });
-          
-          setAllUsers(res.data);
-        } catch (err) {
-          console.error("Error fetching data:", err);
-        }
-      };
-  
-      fetchData();
-    }, []);
-    
+          }
+        );
+        console.log(res.data);
+        
+        setStores(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      const token = localStorage.getItem("token");
+
+      try {
+        const res = await axios.get("http://localhost:3000/users", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setAllUsers(res.data);
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const adminProfile = {
     name: user.name,
     email: user.email,
@@ -53,12 +72,24 @@ const Dashboard = () => {
   };
 
   const stats = [
-    { id: 1, title: "Users", value: metric? metric.totalUsers : 0, icon: "👥", bgColor: "bg-blue-600" },
-    { id: 2, title: "Stores", value: metric? metric.totalStores : 0, icon : "🏬", bgColor: "bg-green-600" },
+    {
+      id: 1,
+      title: "Users",
+      value: metric ? metric.totalUsers : 0,
+      icon: "👥",
+      bgColor: "bg-blue-600",
+    },
+    {
+      id: 2,
+      title: "Stores",
+      value: metric ? metric.totalStores : 0,
+      icon: "🏬",
+      bgColor: "bg-green-600",
+    },
     {
       id: 3,
       title: "Ratings",
-      value: metric? metric.totalRatings : 0,
+      value: metric ? metric.totalRatings : 0,
       icon: "⭐",
       bgColor: "bg-yellow-500",
     },

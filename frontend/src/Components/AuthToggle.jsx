@@ -13,6 +13,12 @@ const AuthToggle = () => {
     if (user.role_id === 1) {
       navigate("/admin");
     }
+    if (user.role_id === 2){
+      navigate("/user");
+    }
+    if (user.role_id === 3){
+      navigate("/owner");
+    }
   }, [user, navigate]);
 
   const initialFormType = location.state?.formType || "login";
