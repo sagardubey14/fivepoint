@@ -2,75 +2,105 @@
 
 A full-stack web application that allows users to rate stores, with different functionalities available based on user roles (Admin, Store Owner, and Normal User).
 
+![Admin Dashboard](screenshots/landingpage.png)
+
 ## 📁 Project Structure
 
-```
-
+```plaintext
 root/
 │
 ├── backend/      # Node.js + Express.js API
 ├── frontend/     # React.js frontend
 └── fivepoint.sql  # SQL schema for MySQL/MariaDB
-
-````
+```
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Frontend:** React.js
-- **Backend:** Node.js + Express.js
-- **Database:** MySQL (MariaDB compatible)
+* **Frontend:** React.js
+* **Backend:** Node.js + Express.js
+* **Database:** MySQL (MariaDB compatible)
 
 ---
 
 ## 🔐 User Roles & Permissions
 
 ### 1. **System Administrator**
-- Can manage users and stores
-- Can view dashboard stats
-- Can filter and view all users/stores and ratings
+
+* Can manage users and stores
+* Can view dashboard stats
+* Can filter and view all users/stores and ratings
 
 ### 2. **Normal User**
-- Can sign up/login
-- Can browse and rate stores (1–5)
-- Can update their rating
+
+* Can sign up/login
+* Can browse and rate stores (1–5)
+* Can update their rating
 
 ### 3. **Store Owner**
-- Can login
-- Can view ratings of their store and average score
+
+* Can login
+* Can view ratings of their store and average score
 
 ---
 
 ## 📌 Features
 
 ### ✅ Common Features
-- Single login system
-- Password update post login
-- Logout functionality
 
+* Single login system
+* Password update post login
+* Logout functionality
+
+**Auth Page:**
+![Auth Page](screenshots/auth.png)
 ### 👤 Admin Dashboard
-- Total users, stores, and ratings
-- Add normal/admin users
-- View all users/stores with filters (Name, Email, Address, Role)
-- Detailed user view (with store rating if owner)
+
+* Total users, stores, and ratings
+* Add normal/admin users
+* View all users/stores with filters (Name, Email, Address, Role)
+* Detailed user view (with store rating if owner)
+
+**Admin Dashboard Screenshot:**
+![Admin Dashboard](screenshots/adminDashboard.png)
+
+**Admin - Selected Users Screenshot:**
+![Admin - Selected Users](screenshots/adminDashboard-selectedUsers.png)
+
+**Admin - Stores Screenshot:**
+![Admin - Stores](screenshots/adminDashboard-stores.png)
+
+**Admin - Users Screenshot:**
+![Admin - Users](screenshots/adminDashboard-users.png)
 
 ### 🧍 Normal User
-- Sign up / Login
-- View & search stores
-- Submit/update rating
-- See personal submitted rating
+
+* Sign up / Login
+* View & search stores
+* Submit/update rating
+* See personal submitted rating
+
+**Normal User Dashboard Screenshot:**
+![Normal User Dashboard](screenshots/userdashboard.png)
 
 ### 🏪 Store Owner
-- View users who rated their store
-- Average store rating
+
+* View users who rated their store
+* Average store rating
+
+**Store Owner Dashboard Screenshot:**
+![Store Owner Dashboard](screenshots/ownerDashboard.png)
+
+**Selected Store Screenshot:**
+![Selected Store](screenshots/selectedstore.png)
 
 ---
 
 ## 🧪 Form Validation Rules
 
 | Field    | Validation                                   |
-|----------|----------------------------------------------|
+| -------- | -------------------------------------------- |
 | Name     | Min 20, Max 60 characters                    |
 | Address  | Max 400 characters                           |
 | Email    | Valid email format                           |
@@ -80,12 +110,12 @@ root/
 
 ## 🗂️ Database Schema
 
-The SQL schema is located in `database.sql`. It includes:
+The SQL schema is located in `fivepoint.sql`. It includes:
 
-- `users`
-- `stores`
-- `roles`
-- `ratings`
+* `users`
+* `stores`
+* `roles`
+* `ratings`
 
 All relationships use foreign keys with appropriate indexing and constraints.
 
@@ -101,7 +131,6 @@ All relationships use foreign keys with appropriate indexing and constraints.
 Email: test@example.com
 Password: Password@123
 ````
-
 ---
 
 ## 🚀 Getting Started
@@ -131,7 +160,7 @@ npm start
 
 ### 4. Setup Database
 
-* Import the `database.sql` file into your MySQL/MariaDB database.
+* Import the `fivepoint.sql` file into your MySQL/MariaDB database.
 * Update DB config in `.env`.
 
 ---
@@ -142,8 +171,7 @@ npm start
 * Follows best practices for backend/REST API and frontend components
 * Easy to extend and deploy
 
-
 ---
 
-**Sagar Dubey**  
+**Sagar Dubey**
 📧 [sagardubey353@gmail.com](mailto:sagardubey353@gmail.com)

@@ -24,7 +24,7 @@ const OwnerDashboard = () => {
     setErrorMessage("");
 
     try {
-      await updatePassword({ ...info, password });
+      await updatePassword({user_id:user.id, ...info, password});
       setSuccessMessage("Profile updated successfully!");
       setPassword("");
     } catch (err) {

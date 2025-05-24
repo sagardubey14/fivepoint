@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 24, 2025 at 10:32 AM
+-- Generation Time: May 24, 2025 at 12:00 PM
 -- Server version: 10.4.25-MariaDB
 -- PHP Version: 8.1.10
 
@@ -36,6 +36,13 @@ CREATE TABLE `ratings` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `ratings`
+--
+
+INSERT INTO `ratings` (`id`, `store_id`, `user_id`, `rating`, `comment`, `created_at`, `updated_at`) VALUES
+(3, 3, 9, 1, NULL, '2025-05-24 09:54:09', '2025-05-24 09:54:09');
 
 -- --------------------------------------------------------
 
@@ -72,6 +79,13 @@ CREATE TABLE `stores` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `stores`
+--
+
+INSERT INTO `stores` (`id`, `name`, `address`, `owner_id`, `created_at`, `updated_at`) VALUES
+(3, 'Jesica Enterprise', 'Vasai', 10, '2025-05-24 09:51:44', '2025-05-24 09:51:44');
+
 -- --------------------------------------------------------
 
 --
@@ -94,7 +108,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `address`, `role_id`, `created_at`, `updated_at`) VALUES
-(8, 'abcdefghijk123456789', 'test@example.com', '$2b$10$ReTrpabw7KVJH7JitqSa5uHiuyeJbmVNl2RVpy.RI/hoKNX/aWcwi', 'Mumbai', 1, '2025-05-24 08:21:48', '2025-05-24 08:29:23');
+(8, 'abcdefghijk123456789', 'test@example.com', '$2b$10$ReTrpabw7KVJH7JitqSa5uHiuyeJbmVNl2RVpy.RI/hoKNX/aWcwi', 'Mumbai', 1, '2025-05-24 08:21:48', '2025-05-24 08:29:23'),
+(9, 'sagar dubey 123456789', 'sagar@dubey.com', '$2b$10$YaO6euNxcOPPwywEShy90e8h4vKUVKbPmtgZ3gTYErVo9lNjePPce', 'Bhayandar', 2, '2025-05-24 09:49:31', '2025-05-24 09:54:23'),
+(10, 'Valli Reddy 1234567890', 'valli@reddy.com', '$2b$10$hhb3S0D.EA8X0KQoDBPzneIPxvVLFlqGOz46Os9u55.HJHm4GSBTu', NULL, 3, '2025-05-24 09:51:12', '2025-05-24 09:58:08');
 
 --
 -- Indexes for dumped tables
@@ -138,7 +154,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `ratings`
 --
 ALTER TABLE `ratings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `roles`
@@ -150,13 +166,13 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `stores`
 --
 ALTER TABLE `stores`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Constraints for dumped tables
