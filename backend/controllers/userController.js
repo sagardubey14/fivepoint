@@ -31,10 +31,10 @@ exports.login = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(401).json({ error: 'Invalid password' });
 
-    const payload = { id: user.id, email: user.email, role_id: user.role_id };
+    const payload = { id: user.id, name: user.name, email: user.email, role_id: user.role_id, address: user.address };
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
 
-    res.json({ message: 'Login successful', token, user: { id: user.id, name: user.name, email: user.email, role_id: user.role_id, address: user.address } });
+    res.json({ message: 'Login successful', token, user: payload });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -61,3 +61,12 @@ exports.getUserById = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+exports.getTokenRefresh = async (req, res)=>{
+ try {
+    let user = req.user;
+    res.status(200).json(user);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}

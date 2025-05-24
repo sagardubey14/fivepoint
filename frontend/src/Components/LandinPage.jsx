@@ -1,8 +1,19 @@
 import { useNavigate } from 'react-router-dom';
 import img from '../assets/stars-rating.jpg';
+import { useEffect } from 'react';
+import { useUser } from '../context/UserContext';
 
 function LandingPage() {
   const navigate = useNavigate();
+  const {user} = useUser();
+  
+  useEffect(() => {
+    if (!user) return;
+    if (user.role_id === 1) {
+      navigate("/admin");
+    }
+  }, [user, navigate]);
+
 
   const goToAuth = (type) => {
     navigate('/auth', { state: { formType: type } });

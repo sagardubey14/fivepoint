@@ -6,31 +6,10 @@ import { useUser } from "../context/UserContext";
 const Users = () => {
   const { allUsers, setAllUsers } = useUser();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const token = localStorage.getItem("token");
-
-      try {
-        const res = await axios.get("http://localhost:3000/users", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        setAllUsers(res.data);
-      } catch (err) {
-        console.error("Error fetching data:", err);
-      }
-    };
-
-    fetchData();
-  }, []);
-
   const [filter, setFilter] = useState({ name: "", email: "", role: "" });
   const [newUser, setNewUser] = useState({ name: "", email: "", role: "User" });
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [formError, setFormError] = useState("");
-
   const filteredUsers = allUsers.filter(
     (user) =>
       user.name.toLowerCase().includes(filter.name.toLowerCase()) &&
@@ -78,8 +57,8 @@ const Users = () => {
         role_id: roleMap[role] || 2,
       });
 
-      setAllUsers([...allUsers, res.data.user]);
-      setNewUser({ name: "", email: "", role: "User" });
+      setAllUsers([...allUsers, {id:res.data.userId, ...newUser}]);
+      setNewUser({ name: "", email: "", role: "user" });
       setIsFormVisible(false);
     } catch (error) {
       setFormError(error.response?.data?.error || "Something went wrong");
@@ -119,7 +98,7 @@ const Users = () => {
               placeholder="Full Name"
               className="border px-3 py-2 rounded"
               value={newUser.name}
-              onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
+              onChange={(e) => setNewUser({ ...newUser, name: String(e.target.value) })}
               required
               autoFocus
             />
@@ -138,9 +117,9 @@ const Users = () => {
               value={newUser.role}
               onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}
             >
-              <option value="User">User</option>
-              <option value="Store Owner">Store Owner</option>
-              <option value="Admin">Admin</option>
+              <option value="user">User</option>
+              <option value="owner">Store Owner</option>
+              <option value="admin">Admin</option>
             </select>
             <div className="flex justify-between">
               <button

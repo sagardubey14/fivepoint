@@ -8,12 +8,11 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/getStats", {
+        const res = await axios.get("http://localhost:3000/admin/getStats", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
-        console.log(res.data);
         setMetric(res.data);
       } catch (error) {
         console.log(error);
@@ -22,7 +21,29 @@ const Dashboard = () => {
     fetchData();
   }, []);
 
-  const { user, setUser } = useUser();
+  const { user, setUser, allUsers, setAllUsers } = useUser();
+
+  
+    useEffect(() => {
+      const fetchData = async () => {
+        const token = localStorage.getItem("token");
+  
+        try {
+          const res = await axios.get("http://localhost:3000/users", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          
+          setAllUsers(res.data);
+        } catch (err) {
+          console.error("Error fetching data:", err);
+        }
+      };
+  
+      fetchData();
+    }, []);
+    
   const adminProfile = {
     name: user.name,
     email: user.email,
@@ -32,12 +53,12 @@ const Dashboard = () => {
   };
 
   const stats = [
-    { id: 1, title: "Users", value: 1240, icon: "👥", bgColor: "bg-blue-600" },
-    { id: 2, title: "Stores", value: 320, icon: "🏬", bgColor: "bg-green-600" },
+    { id: 1, title: "Users", value: metric? metric.totalUsers : 0, icon: "👥", bgColor: "bg-blue-600" },
+    { id: 2, title: "Stores", value: metric? metric.totalStores : 0, icon : "🏬", bgColor: "bg-green-600" },
     {
       id: 3,
       title: "Ratings",
-      value: 5421,
+      value: metric? metric.totalRatings : 0,
       icon: "⭐",
       bgColor: "bg-yellow-500",
     },
