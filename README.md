@@ -2,7 +2,7 @@
 
 A full-stack web application that allows users to rate stores, with different functionalities available based on user roles (Admin, Store Owner, and Normal User).
 
-![Admin Dashboard](screenshots/landingpage.png)
+![Admin Dashboard](screenshots/Landingpage.png)
 
 ## 📁 Project Structure
 
